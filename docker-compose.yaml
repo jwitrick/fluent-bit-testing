@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  fluent-bit:
+    image: fluent/fluent-bit
+    volumes:
+      - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./parsers.conf:/fluent-bit/etc/custom_parsers.conf
+      - ./logs:/var/log/containers/
+    depends_on:
+      - elasticsearch
+  elasticsearch:
+    image: elasticsearch:7.6.2
+    ports:
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
